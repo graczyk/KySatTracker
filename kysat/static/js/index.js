@@ -28,7 +28,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 /*global document, window, setInterval, Cesium, Image, navigator, twoline2rv, sgp4, tle*/
-
+//CHANGED KYS2 Make this global so we can call it with setTimeout
+var defaultViewFunc;
 (function () {
     'use strict';
     var canvas            = document.getElementById('glCanvas');
@@ -564,7 +565,8 @@
         document.getElementById('satellite_velocity').innerHTML = vel0Carte.magnitude().toFixed(3);
         document.getElementById('satellite_latitude').innerHTML = Cesium.Math.toDegrees(carto.latitude).toFixed(3);
         document.getElementById('satellite_longitude').innerHTML = Cesium.Math.toDegrees(carto.longitude).toFixed(3);
-        document.getElementById('satellite_height').innerHTML = carto.height.toFixed(0);
+		//CHANGED KYS2 Remove Height
+		//document.getElementById('satellite_height').innerHTML = carto.height.toFixed(0);
 
     }
 
@@ -787,10 +789,12 @@
         transitioner.toColumbusView();
     };
 
-    document.getElementById('two_d_display_button').onclick = function () {
-        transitioner.to2D();
-    };
-	
+	//CHANGED KYS2 Give this function a name so we can make it global and call it to have it default to the 2D view
+	defaultViewFunc = function () {
+	    transitioner.to2D();
+	};
+
+    document.getElementById('two_d_display_button').onclick = defaultViewFunc;	
 	//CHANGED KYS2 totally removed because we're only supporting one TLE data file, but left here in case future developers need it
 /*
     // Switch which satellites are displayed.
@@ -920,7 +924,5 @@
 	// but if it's before, we don't display the satellite details pane
 	//moveCamera();
 	showOrbit();
-	//added by CM
-	toColumbusView();
 
 }());
